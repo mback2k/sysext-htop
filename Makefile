@@ -1,4 +1,4 @@
-build: torcx.tgz torcx.squashfs
+build: sysext.raw
 
 
 ncurses.tar.gz:
@@ -15,7 +15,7 @@ ncurses: ncurses.tar.gz
 
 
 htop.tar.gz:
-	wget -q https://github.com/htop-dev/htop/archive/3.0.3.tar.gz -O htop.tar.gz
+	wget -q https://github.com/htop-dev/htop/archive/3.3.0.tar.gz -O htop.tar.gz
 
 htop: htop.tar.gz ncurses
 	tar -xzf htop.tar.gz
@@ -24,12 +24,9 @@ htop: htop.tar.gz ncurses
 	cd htop && make
 
 
-torcx: htop
-	mkdir -p rootfs/bin
-	cp -a htop/htop rootfs/bin/
+sysext: htop
+	mkdir -p rootfs/usr/bin
+	cp -a htop/htop rootfs/usr/bin/
 
-torcx.tgz: torcx
-	tar -C rootfs -czf torcx.tgz .
-
-torcx.squashfs: torcx
-	mksquashfs rootfs torcx.squashfs
+sysext.raw: sysext
+	mksquashfs rootfs sysext.raw -all-root
